@@ -1,7 +1,7 @@
 main {
     int a, 1_b, c, _max;
     read(a)
-    read(1_b);
+    read(2_b);
     read(c);
     max = a;
     if (b > max {

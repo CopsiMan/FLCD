@@ -59,6 +59,7 @@ class LinkedList:
 
 class HashTable:
     def __init__(self):
+        self.keys = []
         self.size = 16
         self.alpha = 0
         self.table = [LinkedList() for _ in range(self.size)]
@@ -82,6 +83,7 @@ class HashTable:
             position_in_table = self.hash(value)
             # print(position_in_table)
             position_in_list = self.table[position_in_table].add(value)
+            self.keys.append(value)
             return Position(position_in_table, position_in_list)
 
         return position
@@ -99,3 +101,6 @@ class HashTable:
             linked_list = self.table[i]
             string += str(i) + ": " + str(linked_list) + "\n"
         return string
+
+    def get_keys(self):
+        return self.keys
