@@ -42,8 +42,12 @@ class Scanner:
                 if not self.is_valid_identifier(token):
                     print(token)
                     errors.append(str(self.find_error(token)))
-            position = self.symbol_table.add(token)
-            self.pif += 'token ' + str(token) + " -> " + str(position) + '\n'
+                position = self.symbol_table.add(token)
+                self.pif += str(token) + " -> (" + \
+                            str(position.position_in_table) + ", " + \
+                            str(position.position_in_list) + ')\n'
+            else:
+                self.pif += str(token) + " -> -1 \n"
         if len(errors) == 0:
             errors.append("Lexically correct")
         return errors
@@ -66,6 +70,9 @@ class Scanner:
         return '0'
 
     def write_pif(self):
+        # for token in self.symbol_table.get_keys():
+        #     position = self.symbol_table.get_position(token)
+        #     self.pif += 'token ' + str(token) + " -> " + str(position) + '\n'
         Utils.write("PIF.out", self.pif)
 
     # def initialize_pif(self):
