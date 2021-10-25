@@ -20,7 +20,7 @@ def symbol_table_test(symbol_table):
 
 def main():
     scanner = Scanner()
-    scanner.scan("p1.txt")
+    scanner.scan("p1err.txt")
     result = scanner.initialize_symbol_table()
     scanner.write_symbol_table()
     # scanner.initialize_pif()

@@ -1,0 +1,16 @@
+main {
+    int a, 1_b, c, _max;
+    a = -12;
+    read(a)
+    read(2_b);
+    read(c);
+    max = a;
+    if (b > max {
+     max = b;
+    }
+    if (c > max) {
+        max = c;
+    }
+    write("maximum: ");
+    write(max);
+}
