@@ -14,12 +14,20 @@ class State:
         self.initial = initial
 
 
+def split_states(line):
+    states = line.split()[2:]
+    for i in range(len(states)):
+        states[i] = states[i].strip("{},")
+    # print(states)
+    return states
+
+
 class FA:
     def __init__(self):
         self.set_of_states = ""
         self.alphabet = ""
         self.transitions = ""
-        self.final_states = ""
+        self.final_states = []
         self.Transitions = []
         self.initial_state = ""
 
@@ -28,12 +36,12 @@ class FA:
         self.set_of_states = lines[1]
         self.alphabet = lines[2]
         self.initial_state = lines[3].split()[2]
-        self.final_states = lines[4]
+        self.final_states = split_states(lines[4])
         self.transitions = lines[6:-1]
         for i in range(len(self.transitions)):
             self.transitions[i] = self.transitions[i].strip()
             transition = self.transitions[i].split()
-            print(transition)
+            # print(transition)
             self.Transitions.append(Transition(transition[0][1:-1], transition[1][:-1], transition[3]))
 
         # print(self.transitions)
@@ -42,16 +50,28 @@ class FA:
         # print(self.final_states)
 
     def verify_sequence(self, sequence):
-        return self.verify(self.initial_state, sequence)
+        dfa = self.is_deterministic_finite_automaton()
+        print("Is it a DFA ? - " + str(dfa))
+        if dfa:
+            return "Is it a valid sequence ? - " + str(self.verify(self.initial_state, sequence))
 
     def verify(self, first, sequence):
         if len(sequence) == 0:
-            return True
+            return first in self.final_states
         trough = sequence[0]
         for transition in self.Transitions:
             if transition.matches(first, trough):
                 return self.verify(transition.result, sequence[1:])
         return False
+
+    def is_deterministic_finite_automaton(self):
+        transitions_dictionary = dict()
+        for transition in self.Transitions:
+            key = (transition.initial_state, transition.trough)
+            if key in transitions_dictionary.keys():
+                return False
+            transitions_dictionary[key] = transition.result
+        return True
 
 
 def print_menu():
