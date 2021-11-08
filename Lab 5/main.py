@@ -7,6 +7,9 @@ class Transition:
     def matches(self, initial, trough):
         return self.initial_state == initial and self.trough == trough
 
+    def __str__(self):
+        return "(" + self.initial_state + ", " + self.trough + ") -> " + self.result
+
 
 class State:
     def __init__(self, name, initial):
@@ -42,7 +45,21 @@ class FA:
             self.transitions[i] = self.transitions[i].strip()
             transition = self.transitions[i].split()
             # print(transition)
-            self.Transitions.append(Transition(transition[0][1:-1], transition[1][:-1], transition[3]))
+            should_add = True
+            state = transition[0][1:-1]
+            result = transition[3]
+            trough = transition[1][:-1]
+            if self.set_of_states.find(state) == -1:
+                raise RuntimeError("State " + str(state) + " is not in the set of states.")
+            if self.set_of_states.find(result) == -1:
+                raise RuntimeError("State " + str(result) + " is not in the set of states.")
+            if self.alphabet.find(trough) == -1:
+                raise RuntimeError("Symbol " + str(trough) + " is not in the alphabet.")
+            for transition_duplicate in self.Transitions:
+                if transition_duplicate.matches(state, trough):
+                    should_add = False
+            if should_add:
+                self.Transitions.append(Transition(state, trough, result))
 
         # print(self.transitions)
         # print(self.alphabet)
@@ -87,7 +104,6 @@ def print_menu():
 def main():
     fa = FA()
     fa.read_fa("FA.in")
-    # fa.verify_sequence("101")
     while True:
         print_menu()
         option = input("Option > ")
@@ -99,7 +115,7 @@ def main():
             print(fa.alphabet)
         if option == "3":
             # print(fa.transitions)
-            for transition in fa.transitions:
+            for transition in fa.Transitions:
                 print(transition)
         if option == "4":
             print(fa.final_states)
@@ -109,3 +125,5 @@ def main():
 
 
 main()
+
+# (S1, 0) -> S1
